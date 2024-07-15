@@ -1,0 +1,30 @@
+% Specifications
+Fs = 8000; % Sampling frequency in Hz
+Fc = 2000; % Cutoff frequency in Hz
+N = 4; % Filter order
+
+% Normalized cutoff frequency
+Wn = Fc / (Fs / 2);
+
+% Design Butterworth IIR filter using bilinear transformation
+[b, a] = butter(N, Wn, 'low');
+
+% Frequency response
+[H, f] = freqz(b, a, 1024, Fs);
+
+% Plot the frequency response
+figure;
+
+subplot(2,1,1);
+plot(f, 20*log10(abs(H)), 'b');
+grid on;
+title('Butterworth IIR Filter Magnitude Response');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+
+subplot(2,1,2);
+plot(f, angle(H), 'b');
+grid on;
+title('Butterworth IIR Filter Phase Response');
+xlabel('Frequency (Hz)');
+ylabel('Phase (radians)');
