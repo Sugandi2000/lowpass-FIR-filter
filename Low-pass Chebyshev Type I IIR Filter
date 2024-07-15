@@ -1,0 +1,31 @@
+% Specifications
+Fs = 8000; % Sampling frequency in Hz
+Fc = 2000; % Cutoff frequency in Hz
+N = 4; % Filter order
+Rp = 1; % Passband ripple in dB
+
+% Normalized cutoff frequency
+Wn = Fc / (Fs / 2);
+
+% Design Chebyshev Type I IIR filter using bilinear transformation
+[b, a] = cheby1(N, Rp, Wn, 'low');
+
+% Frequency response
+[H, f] = freqz(b, a, 1024, Fs);
+
+% Plot the frequency response
+figure;
+
+subplot(2,1,1);
+plot(f, 20*log10(abs(H)), 'r');
+grid on;
+title('Chebyshev Type I IIR Filter Magnitude Response');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+
+subplot(2,1,2);
+plot(f, angle(H), 'r');
+grid on;
+title('Chebyshev Type I IIR Filter Phase Response');
+xlabel('Frequency (Hz)');
+ylabel('Phase (radians)');
