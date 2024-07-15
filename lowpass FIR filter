@@ -1,0 +1,58 @@
+% Specifications
+N = 24; % Filter order (25 taps means order is 24)
+Fc = 2000; % Cutoff frequency in Hz
+Fs = 8000; % Sampling frequency in Hz
+
+% Normalized cutoff frequency
+Wn = Fc/(Fs/2);
+
+% Design FIR filter using rectangular window
+b_rect = fir1(N, Wn, 'low', rectwin(N+1));
+
+% Design FIR filter using Hamming window
+b_hamming = fir1(N, Wn, 'low', hamming(N+1));
+
+% Frequency response for rectangular window filter
+[H_rect, f_rect] = freqz(b_rect, 1, 1024, Fs);
+
+% Frequency response for Hamming window filter
+[H_hamming, f_hamming] = freqz(b_hamming, 1, 1024, Fs);
+
+% Plot the impulse responses
+figure;
+subplot(2,1,1);
+stem(0:N, b_rect, 'b');
+title('Impulse Response of FIR Filter (Rectangular Window)');
+xlabel('n');
+ylabel('h[n]');
+grid on;
+
+subplot(2,1,2);
+stem(0:N, b_hamming, 'r');
+title('Impulse Response of FIR Filter (Hamming Window)');
+xlabel('n');
+ylabel('h[n]');
+grid on;
+
+% Plot the frequency responses
+figure;
+
+subplot(2,1,1);
+plot(f_rect, 20*log10(abs(H_rect)), 'b');
+hold on;
+plot(f_hamming, 20*log10(abs(H_hamming)), 'r');
+grid on;
+title('Magnitude Response');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+legend('Rectangular Window', 'Hamming Window');
+
+subplot(2,1,2);
+plot(f_rect, angle(H_rect), 'b');
+hold on;
+plot(f_hamming, angle(H_hamming)), 'r';
+grid on;
+title('Phase Response');
+xlabel('Frequency (Hz)');
+ylabel('Phase (radians)');
+legend('Rectangular Window', 'Hamming Window');
